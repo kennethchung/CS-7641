@@ -72,7 +72,7 @@ nnetTest<-function(){
   names(nnet_iristrain)[7] <- 'versicolor'
   names(nnet_iristrain)[8] <- 'virginica'
   nn <- neuralnet(setosa+versicolor+virginica ~Sepal.Length+Sepal.Width+Petal.Length+Petal.Width,
-                  data=nnet_iristrain,hidden=c(3))
+                  data=nnet_iristrain,hidden=c(3),linear.output=FALSE,, err.fct="ce")
   
   print(nn$result.matrix)
   plot(nn)

@@ -1,10 +1,17 @@
-library("partykit")
-library("e1071")
-library("rpart")
+library(partykit)
+library(e1071)
+library(rpart)
 
-library("ggplot2")
-library("neuralnet")
+library(ggplot2)
+library(neuralnet)
 
+library(nnet)
+library(caret)
+library(randomForest)
+library(ipred)
+library(kernlab)
+library(rgl)
+library(misc3d)
 DataPreparation<-function(){
   redWine<-read.csv("winequality-red.csv",head=TRUE,sep=";")
   whiteWine<-read.csv("winequality-white.csv",head=TRUE,sep=";")
@@ -100,9 +107,10 @@ neuralNetwork<-function(trainData1, testData1, factor){
   
 
   fol <- formula(G1+G2+G3+G4+G5+G6+G7+G8+G9  ~ volatile.acidity + density+alcohol)
-  nn <- neuralnet(fol,data=trainData,hidden=c(3,3))
+  nn <- neuralnet(fol,data=trainData,hidden=c(2))
+  #str(nn)
   plot(nn)
-  prediction <- compute(nn, testData[
+ prediction <- compute(nn, testData[
     c('volatile.acidity','density','alcohol')])$net.result
   
 
@@ -116,6 +124,131 @@ neuralNetwork<-function(trainData1, testData1, factor){
   print(prob)
   print(table(testData$quality,prediction_matrix))
   print(nn$result.matrix)
+}
+
+mysvm<-function(trainData, testData){
+
+  
+  fol <- formula(quality  ~  fixed.acidity + volatile.acidity + citric.acid + residual.sugar + chlorides + free.sulfur.dioxide
+                 +density+pH+sulphates+alcohol )
+  model <- svm(quality~., data=trainData,type='C-classification')
+  print(model)
+
+  
+  
+  #plot(model, trainData, fixed.acidity~alcohol)
+  #plot(model, trainData, volatile.acidity ~alcohol)
+  #plot(model, trainData, citric.acid~alcohol)
+  #plot(model, trainData, residual.sugar~alcohol)
+  #plot(model, trainData, chlorides~alcohol)
+  #plot(model, trainData, free.sulfur.dioxide~alcohol)
+  plot(model, trainData, density~alcohol,svSymbol = 10, dataSymbol = 4)
+  #plot(model, trainData, pH~alcohol)
+  #plot(model, trainData, sulphates~alcohol)
+  
+  predictions <- predict(model,testData, decision.values=T)
+  
+
+  pred.df <-as.data.frame(predictions)
+  prob <- sum(pred.df[,1] == testData$quality) /nrow(testData)
+  print(prob)
+
+  
+  print(table( true = testData$quality,pred = predictions))
+ 
+}
+
+mysvmThreeClass<-function(trainData, testData){
+  
+  trainData$quality=as.numeric(trainData$quality)
+  testData$quality=as.numeric(testData$quality)
+  
+
+  trainData$qualityThreeClass<-apply(trainData[,c('quality','alcohol')], 1, QualityClass)
+  testData$qualityThreeClass<-apply(testData[,c('quality','alcohol')], 1, QualityClass)
+  head(testData[-12])
+  model <- svm(qualityThreeClass~., data=trainData[,c('volatile.acidity','alcohol','qualityThreeClass')],type='C-classification')
+  print(str(model))
+  print(length(trainData$alcohol))
+  print(length(trainData$volatile.acidity))
+  
+  
+  predictions <- predict(model,testData[,c('volatile.acidity','alcohol','qualityThreeClass')])
+  pred.df <-as.data.frame(predictions)
+  prob <- sum(pred.df[,1] == testData$qualityThreeClass) /nrow(testData)
+  print(prob)
+  plot(model, testData[,c('volatile.acidity','alcohol','qualityThreeClass')], volatile.acidity~alcohol)
+  
+ 
+  print(table( true = testData$qualityThreeClass,pred = predictions))
+
+  
+}
+
+
+myknn<-function(trainData, testData, k){
+  
+  
+  cl=factor(trainData$quality)
+  
+  par(mfrow=c(2,2))
+  result<-knn(trainData[-12], testData[-12], cl,k)
+  plot(result)
+  title(main=paste(k,"nearest neighbors",sep="-"), 
+        xlab="Quality", ylab="Frequency") 
+  
+
+  
+  summary(result)
+
+  print(table( true = testData$quality,pred = result))
+  
+  result.df = as.data.frame(result)
+  prob <- sum(result.df[,1] == testData$quality) /nrow(testData)
+  print(prob)
+}
+
+QualityClass <- function(eachRow) {
+  return(
+    if (eachRow[1]>0 && eachRow[1]<4){
+        'good' 
+     
+    }else if (eachRow[1]>4 && eachRow[1]<7){
+        'better'
+    }
+    else{
+      'best'
+    }
+    )
+}
+
+simpleknn<-function(){
+  
+  # Class A cases
+  A1=c(0,0)
+  A2=c(1,1)
+  A3=c(2,2)
+  
+  # Class B cases
+  B1=c(6,6)
+  B2=c(5.5,7)
+  B3=c(6.5,5)
+  
+  # Build the classification matrix
+  train=rbind(A1,A2,A3, B1,B2,B3)
+  print(train)
+  # Class labels vector (attached to each class instance)
+  cl=factor(c(rep("A",3),rep("B",3)))
+  
+  # The object to be classified
+  test=rbind(c(4, 4),c(0, 1))
+
+  
+  # call knn() and get its summary
+  result<-knn(train, test, cl, k = 2)
+  plot(result)
+  summary(knn(train, test, cl, k = 1))
+ 
 }
 
 
