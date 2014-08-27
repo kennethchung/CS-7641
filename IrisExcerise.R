@@ -72,13 +72,14 @@ nnetTest<-function(){
   names(nnet_iristrain)[7] <- 'versicolor'
   names(nnet_iristrain)[8] <- 'virginica'
   nn <- neuralnet(setosa+versicolor+virginica ~Sepal.Length+Sepal.Width+Petal.Length+Petal.Width,
-                  data=nnet_iristrain,hidden=c(3,3,3))
+                  data=nnet_iristrain,hidden=c(3))
   
+  print(nn$result.matrix)
   plot(nn)
-  mypredict <- compute(nn, iristest[-5])$net.result
+  #mypredict <- compute(nn, iristest[-5])$net.result
   #print(mypredict)
-  maxidx <- function(arr) {return(which(arr == max(arr)))}
-  idx <- apply(mypredict, c(1), maxidx)
-  prediction <- c('setosa', 'versicolor', 'virginica')[idx]
-  table(prediction,iristest$Species)
+  #maxidx <- function(arr) {return(which(arr == max(arr)))}
+  #idx <- apply(mypredict, c(1), maxidx)
+  #prediction <- c('setosa', 'versicolor', 'virginica')[idx]
+  #table(prediction,iristest$Species)
 }
