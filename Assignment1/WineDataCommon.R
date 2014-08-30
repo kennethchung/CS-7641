@@ -19,6 +19,8 @@ library(doSNOW)
 library(corrplot)
 library(plotrix)
 library(rattle)
+library(pROC)
+library(RSNNS)
 
 #registerDoSNOW(makeCluster(3,type="SOCK"))
 

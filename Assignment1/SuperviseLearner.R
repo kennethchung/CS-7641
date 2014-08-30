@@ -15,25 +15,26 @@ DataSummary<-function(){
   pie3D(c(nrow(testDataset),nrow(trainDataset)), labels = lbls,  main="Training / Test Dataset")
 }
 
-gneuralnetwork<-function(formula,cv,testData,trainData ){
+gnn<-function(formula,cv,testData,trainData,nnpkg,iter ){
 
-
-  model<-train(formula,data=trainData,method='avNNet',maxit=10,
+  
+  model<-train(formula,data=trainData,method=nnpkg,maxit=iter,
                             trControl=cv,preProcess='range',tunelength=5,trace=F)
- 
+  print(model)
   prediction <- predict(model, testData)
   resultTable=table(actual=testData$myquality,prediction=prediction)
+  print(resultTable)
   print(confusionMatrix(resultTable))
 }
 
 
 gsvm<-function(formula,cv,testData,trainData, svmMethod ){
   
-  nn_opts=data.frame(.hidden=c(10,10))
+  
   model<-train(formula,data=trainData,method=svmMethod,maxit=1000,
                trControl=cv,preProcess='range',tunelength=5,trace=F)
+  print(str(model))
   print(model)
-  
   prediction <- predict(model, testData)
   resultTable=table(actual=testData$myquality,prediction=prediction)
   print(confusionMatrix(resultTable))
@@ -41,11 +42,31 @@ gsvm<-function(formula,cv,testData,trainData, svmMethod ){
 
 gknn<-function(formula,cv,testData,trainData ){
   
-  knn_opts = data.frame(.k=c(seq(1,10,3),20,30,50))
+  knn_opts = data.frame(.k=c(1,2,3,5,10,20,30,50))
   model <- train(formula, data = trainData, method = "knn", 
                   trControl = cv,preProcess='range', tuneGrid=knn_opts)
+  #print(str(model))
   print(model)
-  #prediction <- predict(model, testData)
-  #resultTable=table(actual=testData$myquality,prediction=prediction)
-  #print(confusionMatrix(resultTable))
+  dotPlot(varImp(model))
+  prediction <- predict(model, testData)
+  print(resultTable=table(actual=testData$myquality,prediction=prediction))
+  print(confusionMatrix(prediction,testData$myquality))
+}
+
+giris<-function(){
+
+  
+  knn_opts = data.frame(.k=c(1))
+  model <- train(Species~., data = iris, method = "knn", 
+                 trControl = trainControl(method='cv',number=3),preProcess='range', tuneGrid=knn_opts)
+  print(str(model))
+  print(model)
+  
+  prediction <- predict(model, iris)
+  print(prediction)
+  resultTable=table(iris$Species,prediction)
+  
+
+  confusionMatrix(prediction, iris$Species)
+  
 }
