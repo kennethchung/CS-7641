@@ -24,20 +24,37 @@ gnn<-function(formula,cv,testData,trainData,nnpkg,iter ){
   prediction <- predict(model, testData)
   resultTable=table(actual=testData$myquality,prediction=prediction)
   print(resultTable)
-  print(confusionMatrix(resultTable))
+  print(caret::confusionMatrix(resultTable))
 }
 
+
+gtree<-function(formula,cv,testData,trainData,cp ){
+  
+  cp_opts = data.frame(.cp=c(cp))
+  if (cp >0)
+    model<-train(formula,data=trainData,method='rpart',tuneGrid=cp_opts,trControl=cv)
+  else
+    model<-train(formula,data=trainData,method='rpart',trControl=cv)
+  print(model)
+  #plotcp(model$finalModel)
+  plot(as.party(model$finalModel), type="simple")
+  #text(model$finalModel)
+  prediction <- predict(model, testData)
+  resultTable=table(actual=testData$myquality,prediction=prediction)
+  print(caret::confusionMatrix(resultTable))
+}
 
 gsvm<-function(formula,cv,testData,trainData, svmMethod ){
   
   
   model<-train(formula,data=trainData,method=svmMethod,maxit=1000,
                trControl=cv,preProcess='range',tunelength=5,trace=F)
+  
   print(str(model))
   print(model)
   prediction <- predict(model, testData)
   resultTable=table(actual=testData$myquality,prediction=prediction)
-  print(confusionMatrix(resultTable))
+  print(caret::confusionMatrix(resultTable))
 }
 
 gknn<-function(formula,cv,testData,trainData ){
@@ -50,23 +67,35 @@ gknn<-function(formula,cv,testData,trainData ){
   dotPlot(varImp(model))
   prediction <- predict(model, testData)
   print(resultTable=table(actual=testData$myquality,prediction=prediction))
-  print(confusionMatrix(prediction,testData$myquality))
+  print(caret::confusionMatrix(prediction,testData$myquality))
 }
 
 giris<-function(){
 
   
-  knn_opts = data.frame(.k=c(1))
-  model <- train(Species~., data = iris, method = "knn", 
-                 trControl = trainControl(method='cv',number=3),preProcess='range', tuneGrid=knn_opts)
-  print(str(model))
-  print(model)
+  #knn_opts = data.frame(.k=c(1))
+  #model <- train(Species~., data = iris, method = "knn", 
+  #               trControl = trainControl(method='cv',number=3),preProcess=c("center", "scale"), tuneGrid=knn_opts)
+  #model<-train(Species~.,data=iris,method='svmRadial',metric = "ROC",
+  #             trControl=trainControl(method = "repeatedcv", repeats = 3
+  #                                    ,summaryFunction = twoClassSummary
+  #                                    ,classProbs = TRUE),preProcess='range',tunelength=5,trace=F)
   
-  prediction <- predict(model, iris)
-  print(prediction)
-  resultTable=table(iris$Species,prediction)
+  #marsGrid <- data.frame(degree = 1, nprune = (1:10) * 3)
+  tc <- trainControl("cv",10)
+  rpart.grid <- expand.grid(.cp=0.45)
+  model<-train(Species~.,data=iris,method='rpart',trControl=tc,tuneGrid=rpart.grid)
+  #print(str(model))
+  print(model)
+  plot(as.party(model$finalModel), type="simple")
+  text(model$finalModel)
+  #print(model$finalModel)
+  #plot(model, metric = "ROC",scales = list(x = list(log=2)))
+  #prediction <- predict(model, iris)
+  #print(prediction)
+  #resultTable=table(iris$Species,prediction)
   
 
-  confusionMatrix(prediction, iris$Species)
+  #caret::confusionMatrix(prediction, iris$Species)
   
 }

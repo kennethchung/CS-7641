@@ -6,7 +6,7 @@ library(ggplot2)
 library(neuralnet)
 
 library(nnet)
-library(caret)
+
 library(randomForest)
 library(ipred)
 library(kernlab)
@@ -22,7 +22,9 @@ library(rattle)
 library(pROC)
 library(RSNNS)
 
-#registerDoSNOW(makeCluster(3,type="SOCK"))
+
+library(caret)
+registerDoSNOW(makeCluster(3,type="SOCK"))
 
 redWine<-read.csv("winequality-red.csv",head=TRUE,sep=";")
 whiteWine<-read.csv("winequality-white.csv",head=TRUE,sep=";")
