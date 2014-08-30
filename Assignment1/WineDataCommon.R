@@ -39,24 +39,24 @@ WineDataset<-rbind(tmp1,tmp2)
 WineDataset$myquality=as.factor(WineDataset$myquality)
 
 set.seed(1234)
-wineTestIndex = sample(1:nrow(WineDataset), nrow(redWine)/2)
-wineTestIndex = createDataPartition(WineDataset$myquality, p=0.8, list=F)
-
+#wineTestIndex = sample(1:nrow(WineDataset), nrow(redWine)/2)
+wineTrainIndex = createDataPartition(WineDataset$myquality, p=0.8, list=F, times = 1)
+#MyFolds <- createMultiFolds(virginica, k = 10, times = 5)
 
 WineProjectCols = c('myquality','free.sulfur.dioxide','fixed.acidity','volatile.acidity','citric.acid','residual.sugar',
                 'chlorides','total.sulfur.dioxide','pH','sulphates','alcohol')
 
 WineProjectColsNN = c('volatile.acidity','alcohol')
 
-WineTestData = WineDataset[wineTestIndex,WineProjectCols]
-WineTrainingData = WineDataset[-wineTestIndex,WineProjectCols]
+WineTestData = WineDataset[-wineTrainIndex,WineProjectCols]
+WineTrainingData = WineDataset[wineTrainIndex,WineProjectCols]
 WineFormula = formula(myquality ~ free.sulfur.dioxide+fixed.acidity+volatile.acidity+citric.acid+residual.sugar+chlorides+
                         total.sulfur.dioxide+pH+sulphates+alcohol)
 
 WineFormulaNN = formula(myquality ~ volatile.acidity+alcohol)
 
 
-Wine_cv=trainControl(method='cv',number=10)
+Wine_cv=trainControl(method='repeatedcv',repeats=3)
 wineQuality <- function(eachRow) {
   return(
     #eachRow[1])

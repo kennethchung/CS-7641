@@ -12,12 +12,22 @@ library(ipred)
 library(kernlab)
 library(rgl)
 library(misc3d)
+library(class)
+library(RWeka)
+library(foreign)
+library(doSNOW)
+registerDoSNOW(makeCluster(3,type="SOCK"))
 DataPreparation<-function(){
+
+
   redWine<-read.csv("winequality-red.csv",head=TRUE,sep=";")
   whiteWine<-read.csv("winequality-white.csv",head=TRUE,sep=";")
   
   redWine$quality=as.character(redWine$quality)
   whiteWine$quality=as.character(whiteWine$quality)
+  redWine$quality=as.factor(redWine$quality) 
+  whiteWine$quality=as.factor(whiteWine$quality)
+
   
   set.seed(2)
   redtrainindex = sample(1:nrow(redWine), nrow(redWine)/2)
@@ -29,8 +39,6 @@ DataPreparation<-function(){
   whitetestindex = -whitetrainindex
   whitetraindata =whiteWine[whitetrainindex,]
   whitetestdata = whiteWine[whitetestindex,]
-
-
   
 }
 
@@ -64,11 +72,48 @@ DescisionTree<-function(){
   print(fit)
   printcp(fit)
   #plot(as.party(fit), type="simple")
-  rsq.rpart(fit)
+  #rsq.rpart(fit)
   #summary(fit)
   #plotcp(fit)
   
   prediction <-predict(fit,testData,type="class")
+  
+  pred.df <-as.data.frame(prediction)
+  
+  prob <- sum(pred.df[,1] == testData$quality) /nrow(testData)
+  print(prob)
+  print(table(testData$quality,prediction))
+}
+
+
+DescisionTree1<-function(){
+  
+  trainData <-whitetraindata
+  testData <- whitetestdata
+  
+  print(head(trainData))
+  fol <- formula(quality  ~  fixed.acidity + volatile.acidity + citric.acid + residual.sugar + chlorides + free.sulfur.dioxide
+                +density+pH+sulphates+alcohol )
+  #fit<-rpart(formula=fol,data=trainData,method="class",control=rpart.control(minsplit=10))
+  #fit <- J48(fol, data = trainData)
+  fit <- J48(fol, data = trainData)
+  #pfit<- prune(fit, cp=   fit$cptable[which.min(fit$cptable[,"xerror"]),"CP"])
+  #fit<-pfit
+  #print(summary(fit))
+ 
+  eval_fit <- evaluate_Weka_classifier(fit, newdata=testData, numFolds = 100, complexity = FALSE, 
+                                       seed = 1, class = TRUE)
+  
+  print(eval_fit)
+  prediction <- predict(fit, data=testData,type='class')
+  
+  #printcp(fit)
+  #plot(as.party(fit), type="simple")
+  #rsq.rpart(fit)
+  #summary(fit)
+  #plotcp(fit)
+  
+  #prediction <-predict(fit,testData,type="class")
   
   pred.df <-as.data.frame(prediction)
   
@@ -110,7 +155,7 @@ neuralNetwork<-function(trainData1, testData1, factor){
   nn <- neuralnet(fol,data=trainData,hidden=c(2))
   #str(nn)
   plot(nn)
- prediction <- compute(nn, testData[
+  prediction <- compute(nn, testData[
     c('volatile.acidity','density','alcohol')])$net.result
   
 
@@ -129,7 +174,8 @@ neuralNetwork<-function(trainData1, testData1, factor){
 mysvm<-function(trainData, testData){
 
   
-  fol <- formula(quality  ~  fixed.acidity + volatile.acidity + citric.acid + residual.sugar + chlorides + free.sulfur.dioxide
+  fol <- formula(quality  ~  fixed.acidity + volatile.acidity + citric.acid + residual.sugar 
+                 + chlorides + free.sulfur.dioxide
                  +density+pH+sulphates+alcohol )
   model <- svm(quality~., data=trainData,type='C-classification')
   print(model)
@@ -193,6 +239,7 @@ myknn<-function(trainData, testData, k){
   
   par(mfrow=c(2,2))
   result<-knn(trainData[-12], testData[-12], cl,k)
+  #s=split(sample(nrow(iris)),rep(1:3,length=nrow(iris)))
   plot(result)
   title(main=paste(k,"nearest neighbors",sep="-"), 
         xlab="Quality", ylab="Frequency") 
