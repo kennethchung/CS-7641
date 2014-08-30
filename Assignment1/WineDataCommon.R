@@ -18,8 +18,9 @@ library(foreign)
 library(doSNOW)
 library(corrplot)
 library(plotrix)
+library(rattle)
 
-registerDoSNOW(makeCluster(3,type="SOCK"))
+#registerDoSNOW(makeCluster(3,type="SOCK"))
 
 redWine<-read.csv("winequality-red.csv",head=TRUE,sep=";")
 whiteWine<-read.csv("winequality-white.csv",head=TRUE,sep=";")
@@ -38,14 +39,14 @@ wineTestIndex = sample(1:nrow(WineDataset), nrow(redWine)/2)
 wineTestIndex = createDataPartition(WineDataset$myquality, p=0.8, list=F)
 
 
-WineProjectCols = c('myquality','WineColor','free.sulfur.dioxide','fixed.acidity','volatile.acidity','citric.acid','residual.sugar',
+WineProjectCols = c('myquality','free.sulfur.dioxide','fixed.acidity','volatile.acidity','citric.acid','residual.sugar',
                 'chlorides','total.sulfur.dioxide','pH','sulphates','alcohol')
 
 WineProjectColsNN = c('volatile.acidity','alcohol')
 
 WineTestData = WineDataset[wineTestIndex,WineProjectCols]
 WineTrainingData = WineDataset[-wineTestIndex,WineProjectCols]
-WineFormula = formula(myquality ~ WineColor+free.sulfur.dioxide+fixed.acidity+volatile.acidity+citric.acid+residual.sugar+chlorides+
+WineFormula = formula(myquality ~ free.sulfur.dioxide+fixed.acidity+volatile.acidity+citric.acid+residual.sugar+chlorides+
                         total.sulfur.dioxide+pH+sulphates+alcohol)
 
 WineFormulaNN = formula(myquality ~ volatile.acidity+alcohol)
@@ -71,8 +72,12 @@ WineSummary<-function()
 
 WineVariableCorr<-function()
 {
-  corre <- cor(WineDataset[,-c(13)])
+  tmp<-WineDataset[,-c(13)]
+  corre <- cor(tmp)
   print(corre)
+  
+  print(names(tmp[,findCorrelation(corre,0.7)]))
+  
   corrplot(corre,method='number',tl.cex=0.5)
 }
 
