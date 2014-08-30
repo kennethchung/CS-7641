@@ -24,7 +24,7 @@ library(RSNNS)
 
 
 library(caret)
-registerDoSNOW(makeCluster(3,type="SOCK"))
+#registerDoSNOW(makeCluster(3,type="SOCK"))
 
 redWine<-read.csv("winequality-red.csv",head=TRUE,sep=";")
 whiteWine<-read.csv("winequality-white.csv",head=TRUE,sep=";")
@@ -99,7 +99,7 @@ WineTestAndTrainPct<-function(){
   lbls <- c(paste("Test",nrow(WineTestData),testPct,"%"), paste("Training",nrow(WineTrainingData),trainPct,"%"))
   pie3D(c(nrow(WineTestData),nrow(WineTrainingData)), labels = lbls,  main="Training / Test Dataset")
 }
-winelm<-function(){
+Winelm<-function(){
   
   print(summary(lm(formula = quality ~ density+WineColor+free.sulfur.dioxide+fixed.acidity+volatile.acidity+citric.acid+residual.sugar+chlorides+
               total.sulfur.dioxide+pH+sulphates+alcohol, data = WineDataset)))

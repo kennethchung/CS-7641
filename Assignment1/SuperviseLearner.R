@@ -1,10 +1,13 @@
 
-
+#########################################################################
+# Turning Parameter neural network: avNNet or mlp (Multiprecepton neural)
+# Turning Parameter iter: Maximum number of iteration it stops or it stops when it reaches below the threshold
+##########################################################################
 gnn<-function(formula,cv,trainData,testData,nnpkg,iter ){
 
   nodes<-ncol(trainData)-1
  
-  mlpGrid <- data.frame(.size=c(2,2))
+
   
   if (nnpkg=='avNNet')
     model<-caret::train(formula,data=trainData,method=nnpkg,maxit=iter,
@@ -20,7 +23,9 @@ gnn<-function(formula,cv,trainData,testData,nnpkg,iter ){
   print(caret::confusionMatrix(resultTable))
 }
 
-
+#########################################################################
+# Turning Parameter complexity parameter: cp, cp is asscicated with cross error.
+##########################################################################
 gtree<-function(formula,cv,trainData,testData,cp ){
   
   # tuneLenght is used to evaluate a broader set of models
@@ -48,8 +53,10 @@ gtree<-function(formula,cv,trainData,testData,cp ){
   print(caret::confusionMatrix(resultTable))
 }
 
-
-# Trials: Turning Parameter
+#########################################################################
+# Turning Parameter: Trials
+# If Trials < 1, default will be provided by caret packags 1,10,20,...100
+##########################################################################
 gbtree<-function(formula,cv,trainData,testData,trials ){
 
   # use trial to simulate boosting vs overfitting
@@ -70,7 +77,10 @@ gbtree<-function(formula,cv,trainData,testData,trials ){
 }
 
 
-
+#####################################################################
+### Truning Parameter Kernels- svmMethod: svmRadial and svmLinear kernels from kernlab
+### Tuning Parameter Cost: 0.25, 0.5, 1.5
+######################################################################
 gsvm<-function(formula,cv,trainData,testData, svmMethod){
   
   # tune C, the cost parameter
@@ -96,6 +106,9 @@ gsvm<-function(formula,cv,trainData,testData, svmMethod){
   print(caret::confusionMatrix(resultTable))
 }
 
+###############################################################
+#### Turing Parameter k: It is set to 1,2,3,5,10,20,30, 50
+###############################################################
 gknn<-function(formula,cv,trainData,testData){
   
   # Tuning Parameter on k

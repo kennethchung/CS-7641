@@ -1,19 +1,206 @@
+This document show you how to run the supervised learn against Wine dataset.
+The WineDataCommon.R contains reading and setting up the wine training and test datasets.
+
+Load Wine data and verify Wine Training and test data
+1) Source WineDataCommon.R will load the following as global variables 
+   a) WineFormula (Model Formula)
+   b) Wine_cv (Cross Validation setting)
+   c) WineTrainingData (Training Dataset)
+   d) WineTestData (Test Dataset)
+2) Run WineSummary() to get the summary of combined red and white dataset
+3) Run WineVariableCorr() to get the predictor correlation matrix barplot
+4) Run WineTargetDist() to get the wine quality distribution
+5) Run Winelm() to get Wine linear regression matrix
+
+Run supervised learning algoritum aganist wine dataset
+1) Source SuperviseLearner.R first
+2) Run gnn(WineFormula,Wine_cv,WineTrainingData, WineTestData,'avNNet',10) to use
+   average single layer neural network where
+   'avNet' is the average neural network
+   10 is the maximum iterations
+   The model with highest accuracy will be chosen and applied to test data for prediction
+   
+3) Run gnn(WineFormula,Wine_cv,WineTrainingData, WineTestData,'mlp',10) to use
+   Multiple Layer Preceptron network work where
+   'mlp' is the multiple layer preceptron 
+   10 is the maximum iterations
+   The model with highest accuracy will be chosen and applied to test data for prediction
+   
+4) Run gtree(WineFormula,Wine_cv,WineTrainingData, WineTestData, 0.12) to use
+   rpart decision tree where
+   0.12 the complexity parameter. This parameter assoicates with cross error and can be used for pruning at specific level
+   gtree(WineFormula,Wine_cv,WineTrainingData, WineTestData, 0.05)
+   The model with highest accuracy will be chosen and applied to test data for prediction
+   
+4) Run gtree(WineFormula,Wine_cv,WineTrainingData, WineTestData, -1) to use
+   rpart decision tree where
+   -1 is to use default setting from caret where it defaults to use 3 complexity paramters
+   The model with highest accuracy will be chosen and applied to test data for prediction
+
+5) Run gsvm(WineFormula,Wine_cv,WineTrainingData, WineTestData,'svmLinear' ) to 
+   linear support vector machine kernel where
+   'svmLinear' is the from KernelLab package
+   It defaults to use 2^-2,0.5,1,1.5 as the cost
+   The model with highest accuracy will be chosen and applied to test data for prediction
+   
+6) Run gsvm(WineFormula,Wine_cv,WineTrainingData, WineTestData,'svmRadial' ) to
+   usse Radial Basis Function Kernel where
+   'svmRadial' is the radial basis function
+   It defaults to use 2^-2,0.5,1,1.5 as the cost for the model.
+   The model with highest accuracy will be chosen and applied to test data for prediction
 
 
-gnn(WineFormula,Wine_cv,WineTrainingData, WineTestData,'avNNet',10)
-gnn(WineFormula,Wine_cv,WineTrainingData, WineTestData,'mlp',10)
-gtree(WineFormula,Wine_cv,WineTrainingData, WineTestData, 0.12)
-gtree(WineFormula,Wine_cv,WineTrainingData, WineTestData, 0.05)
-gtree(WineFormula,Wine_cv,WineTrainingData, WineTestData, -1)
-gsvm(WineFormula,Wine_cv,WineTrainingData, WineTestData,'svmLinear' )
-gsvm(WineFormula,Wine_cv,WineTrainingData, WineTestData,'svmRadial' )
-gsvm(WineFormula,Wine_cv,WineTrainingData, WineTestData,'ksvm' )
-gknn(WineFormula,Wine_cv,WineTrainingData, WineTestData)
-gbtree(WineFormula,Wine_cv,WineTrainingData, WineTestData,10)
-gbtree(WineFormula,Wine_cv,WineTrainingData, WineTestData,-1)
+7) Run gknn(WineFormula,Wine_cv,WineTrainingData, WineTestData) to use
+   k-Nearest Neighbors 
+   It defaults to use 1,2,3,5,10,20,30,50 as k
+   The model with highest accuracy will be chosen and applied to test data for prediction
+   
+8) Run gbtree(WineFormula,Wine_cv,WineTrainingData, WineTestData,10) to use
+   boosted tree where
+   10 is # of trials. where -1 means to use 1 to 100 trials
+   gbtree(WineFormula,Wine_cv,WineTrainingData, WineTestData,-1)
 
 
+Below are results of above runs.
+-----------------------------------------------------------------------------------------------------------
+CART 
 
+5199 samples
+  10 predictor
+   3 classes: 'Best', 'Better', 'Good' 
+
+Pre-processing: re-scaling to [0, 1] 
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+
+Summary of sample sizes: 4680, 4679, 4681, 4679, 4678, 4679, ... 
+
+Resampling results across tuning parameters:
+
+  cp       Accuracy  Kappa  Accuracy SD  Kappa SD
+  0.00000  0.712     0.410  0.0162       0.0335  
+  0.00552  0.712     0.386  0.0138       0.0288  
+  0.01104  0.709     0.368  0.0128       0.0284  
+  0.01657  0.709     0.368  0.0128       0.0284  
+  0.02209  0.709     0.368  0.0128       0.0284  
+  0.02761  0.709     0.368  0.0128       0.0284  
+  0.03313  0.709     0.368  0.0128       0.0284  
+  0.03865  0.709     0.368  0.0128       0.0284  
+  0.04418  0.709     0.368  0.0128       0.0284  
+  0.04970  0.709     0.368  0.0128       0.0284  
+  0.05522  0.709     0.368  0.0128       0.0284  
+  0.06074  0.709     0.368  0.0128       0.0284  
+  0.06626  0.709     0.368  0.0128       0.0284  
+  0.07178  0.709     0.368  0.0128       0.0284  
+  0.07731  0.709     0.368  0.0128       0.0284  
+  0.08283  0.709     0.368  0.0128       0.0284  
+  0.08835  0.709     0.368  0.0128       0.0284  
+  0.09387  0.709     0.368  0.0128       0.0284  
+  0.09939  0.709     0.368  0.0128       0.0284  
+  0.10492  0.706     0.366  0.0162       0.0298  
+  0.11044  0.695     0.356  0.0299       0.0405  
+  0.11596  0.680     0.343  0.0291       0.0372  
+  0.12148  0.670     0.338  0.0218       0.0338  
+  0.12700  0.668     0.339  0.0203       0.0349  
+  0.13253  0.668     0.339  0.0203       0.0349  
+  0.13805  0.665     0.327  0.0226       0.0707  
+  0.14357  0.660     0.314  0.0228       0.0911  
+  0.14909  0.658     0.303  0.0250       0.1076  
+  0.15461  0.652     0.277  0.0272       0.1292  
+  0.16014  0.625     0.145  0.0261       0.1585  
+
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was cp = 0.005521912. 
+Confusion Matrix and Statistics
+
+        prediction
+actual   Best Better Good
+  Best      0     39    0
+  Better    0    662  121
+  Good      0    259  217
+
+Overall Statistics
+                                         
+               Accuracy : 0.6772         
+                 95% CI : (0.651, 0.7026)
+    No Information Rate : 0.7396         
+    P-Value [Acc > NIR] : 1              
+                                         
+                  Kappa : 0.2957         
+ Mcnemar's Test P-Value : NA             
+
+Statistics by Class:
+
+                     Class: Best Class: Better Class: Good
+Sensitivity                   NA        0.6896      0.6420
+Specificity              0.96995        0.6420      0.7302
+Pos Pred Value                NA        0.8455      0.4559
+Neg Pred Value                NA        0.4214      0.8528
+Prevalence               0.00000        0.7396      0.2604
+Detection Rate           0.00000        0.5100      0.1672
+Detection Prevalence     0.03005        0.6032      0.3667
+Balanced Accuracy             NA        0.6658      0.6861
+-----------------------------------------------------------------------------------------------------------
+Model Averaged Neural Network 
+
+5199 samples
+  10 predictor
+   3 classes: 'Best', 'Better', 'Good' 
+
+Pre-processing: re-scaling to [0, 1] 
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+
+Summary of sample sizes: 4679, 4679, 4679, 4681, 4679, 4679, ... 
+
+Resampling results across tuning parameters:
+
+  size  decay  Accuracy  Kappa  Accuracy SD  Kappa SD
+  1     0e+00  0.650     0.163  0.0488       0.1665  
+  1     1e-04  0.710     0.381  0.0227       0.0565  
+  1     1e-01  0.711     0.392  0.0219       0.0449  
+  3     0e+00  0.681     0.252  0.0503       0.1595  
+  3     1e-04  0.733     0.435  0.0200       0.0422  
+  3     1e-01  0.729     0.427  0.0213       0.0450  
+  5     0e+00  0.660     0.188  0.0594       0.1908  
+  5     1e-04  0.740     0.452  0.0198       0.0434  
+  5     1e-01  0.733     0.436  0.0207       0.0442  
+
+Tuning parameter 'bag' was held constant at a value of FALSE
+Accuracy was used to select the optimal model using  the largest value.
+The final values used for the model were size = 5, decay = 1e-04 and bag = FALSE. 
+        prediction
+actual   Best Better Good
+  Best      0     39    0
+  Better    0    644  139
+  Good      0    180  296
+Confusion Matrix and Statistics
+
+        prediction
+actual   Best Better Good
+  Best      0     39    0
+  Better    0    644  139
+  Good      0    180  296
+
+Overall Statistics
+                                         
+               Accuracy : 0.7242         
+                 95% CI : (0.699, 0.7484)
+    No Information Rate : 0.6649         
+    P-Value [Acc > NIR] : 2.45e-06       
+                                         
+                  Kappa : 0.4206         
+ Mcnemar's Test P-Value : NA             
+
+Statistics by Class:
+
+                     Class: Best Class: Better Class: Good
+Sensitivity                   NA        0.7462      0.6805
+Specificity              0.96995        0.6805      0.7914
+Pos Pred Value                NA        0.8225      0.6218
+Neg Pred Value                NA        0.5748      0.8309
+Prevalence               0.00000        0.6649      0.3351
+Detection Rate           0.00000        0.4961      0.2280
+Detection Prevalence     0.03005        0.6032      0.3667
+Balanced Accuracy             NA        0.7133      0.7359
 ----------------------------------------------------------------------------------------------------
 Multi-Layer Perceptron 
 
