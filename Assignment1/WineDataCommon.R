@@ -30,30 +30,30 @@ redWine<-read.csv("winequality-red.csv",head=TRUE,sep=";")
 whiteWine<-read.csv("winequality-white.csv",head=TRUE,sep=";")
 tmp1<-redWine
 tmp2<-whiteWine
-tmp1$myquality<-apply(redWine[,c('quality','alcohol')], 1, wineQuality)
-tmp2$myquality<-apply(whiteWine[,c('quality','alcohol')], 1, wineQuality)
+tmp1$myclass<-apply(redWine[,c('quality','alcohol')], 1, wineQuality)
+tmp2$myclass<-apply(whiteWine[,c('quality','alcohol')], 1, wineQuality)
 tmp1$WineColor<-c(rep(1,nrow(redWine)))
 tmp2$WineColor<-c(rep(2,nrow(whiteWine)))
 
 WineDataset<-rbind(tmp1,tmp2)
-WineDataset$myquality=as.factor(WineDataset$myquality)
+WineDataset$myclass=as.factor(WineDataset$myclass)
 
 set.seed(1234)
 #wineTestIndex = sample(1:nrow(WineDataset), nrow(redWine)/2)
-wineTrainIndex = createDataPartition(WineDataset$myquality, p=0.8, list=F, times = 1)
+wineTrainIndex = createDataPartition(WineDataset$myclass, p=0.8, list=F, times = 1)
 #MyFolds <- createMultiFolds(virginica, k = 10, times = 5)
 
-WineProjectCols = c('myquality','free.sulfur.dioxide','fixed.acidity','volatile.acidity','citric.acid','residual.sugar',
+WineProjectCols = c('myclass','free.sulfur.dioxide','fixed.acidity','volatile.acidity','citric.acid','residual.sugar',
                 'chlorides','total.sulfur.dioxide','pH','sulphates','alcohol')
 
 WineProjectColsNN = c('volatile.acidity','alcohol')
 
 WineTestData = WineDataset[-wineTrainIndex,WineProjectCols]
 WineTrainingData = WineDataset[wineTrainIndex,WineProjectCols]
-WineFormula = formula(myquality ~ free.sulfur.dioxide+fixed.acidity+volatile.acidity+citric.acid+residual.sugar+chlorides+
+WineFormula = formula(myclass ~ free.sulfur.dioxide+fixed.acidity+volatile.acidity+citric.acid+residual.sugar+chlorides+
                         total.sulfur.dioxide+pH+sulphates+alcohol)
 
-WineFormulaNN = formula(myquality ~ volatile.acidity+alcohol)
+WineFormulaNN = formula(myclass ~ volatile.acidity+alcohol)
 
 
 Wine_cv=trainControl(method='repeatedcv',repeats=3)
@@ -86,7 +86,7 @@ WineVariableCorr<-function()
 }
 
 WineTargetDist<-function(){
-  categories <- table(WineDataset$myquality)
+  categories <- table(WineDataset$myclass)
   barplot(categories)
   title(main="Wine Dataset", xlab="Wine Quality")
 }
