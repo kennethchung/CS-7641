@@ -1,0 +1,68 @@
+
+K-nearest neighbors
+Instance based learning
+Lazy and eager learnings
+Similarity function (distance function)
+Averaging
+Locally weighted regression
+More features you include, more data you need (The curses functionality)
+
+SVM
+Maximize Margins
+Kernel Tricks
+Optimization problem for finding max margins
+Support Vectors
+Points that are within the margins (or on its boundary) are the support vectors. The prediction function only uses the support vectors.
+Tuning the cost and kernel parameters. If the cost parameter is large, there is a significant penalty for having samples within the margin
+
+
+Cross Valuation
+Linear and polynomial regression
+Perceptron – threshold unit
+Back propagation/Gradient Descent
+Preference/Restriction bias of neural networks
+
+
+
+
+    Method Value: avNNet from package caret with tuning parameters: decay, bag, size (dual use)
+
+    Method Value: mlp from package RSNNS with tuning parameter size (dual use)
+
+    Method Value: mlpWeightDecay from package RSNNS with tuning parameters: size, decay (dual use)
+
+    Method Value: neuralnet from package neuralnet with tuning parameters: layer1, layer3, layer2 (regression only)
+
+    Method Value: nnet from package nnet with tuning parameters: decay, size (dual use)
+
+    Method Value: pcaNNet from package caret with tuning parameters: decay, size (dual use)
+
+    Method Value: qrnn from package qrnn with tuning parameters: penalty, bag, n.hidden (regression only)
+    
+    
+   Unconditional probabilities are positive-predictive values and negative-predictive values.
+   Accuracy # True Positive + True Negative / # Population
+   Data Transformation with range (caret preprocess)
+   K-Fold Cross-Validation
+   We leave out the first block of data and fit a model.
+   This model is used to predict the held=out block
+   We continue this process until we predict all K held-out blocks
+   
+   Boostrapping. This procedures also has low variance but non-zero bias when compared to k-fold CV (createResample)
+   
+   Kappa statistic takes into account the expected error rate:
+   Kappa statists = Observed Accuracy – Expected Accuracy / 1 – Expected Accuracy. 
+   Kappa statistics are higher when codes are equiprobable. The effect of bias is greater when Kappa is small than when it is large.
+   Sensitivity: Given that a result is truly an event, what is the probability that the model will predict an event results.
+   Sensitivity = # True Positive / # Test outcome positive
+   Specificity: Given that a result is truly not an event, what is the probability that the mode will predict a negative results?
+   Specificity = # true Negative / # Test outcome Negative
+
+   
+   K-fold CV has smaller variance than k-fold CV, it is likely to be biase.
+   Resample the training samples allows to know when we are making poor choices for the values of these parameters. Resampling method try to inject variations in the system to approximate the model’s performance on future samples.
+   Resampling will give us honest estimates of future performance.
+   Repeated training.
+   Determine K based on highest cross-validated accuracy
+   Tree can be indexed by their maximum depth and the classical CART methodology uses a cost-complexity (CP) to be determine best tree depth.
+

@@ -11,10 +11,10 @@ gnn<-function(formula,cv,trainData,testData,nnpkg,iter ){
   
   if (nnpkg=='avNNet')
     model<-caret::train(formula,data=trainData,method=nnpkg,maxit=iter,
-                            trControl=cv,preProcess='range',trace=F)
+                            trControl=cv,preProcess='range',trace=F,tuneLength=30)
   else if (nnpkg=='mlp')
     model<-train(formula,data=trainData,method=nnpkg,maxit=iter,
-                 trControl=cv,preProcess='range',trace=F)
+                 trControl=cv,preProcess='range',trace=F,tuneLength=30)
 
   print(model)
   prediction <- predict(model, testData)
