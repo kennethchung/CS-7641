@@ -27,7 +27,7 @@ library(caret)
 #registerDoSNOW(makeCluster(3,type="SOCK"))
 
 redWine<-read.csv("winequality-red.csv",head=TRUE,sep=";")
-whiteWine<-read.csv("winequality-white.csv",head=TRUE,sep=";")
+redwhiteWine<-read.csv("winequality-white.csv",head=TRUE,sep=";")
 tmp1<-redWine
 tmp2<-whiteWine
 tmp1$myclass<-apply(redWine[,c('quality','alcohol')], 1, wineQuality)

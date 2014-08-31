@@ -38,11 +38,11 @@ gtree<-function(formula,cv,trainData,testData,cp ){
                  preProcess='range',tuneLength=30)
   else
     model<-caret::train(formula,data=trainData,method='rpart',trControl=cv,preProcess='range',
-                 tuneLength=30 )
+                 tuneLength=10 )
   print(model)
   
-  plot(as.party(model$finalModel), type="simple")
-  text(model$finalModel)
+  #plot(as.party(model$finalModel), type="simple")
+  #ext(model$finalModel)
   prediction <- predict(model, testData)
   
   # prediction using probability
@@ -73,7 +73,9 @@ gbtree<-function(formula,cv,trainData,testData,trials ){
   
   prediction <- predict(model, testData)
   resultTable=table(actual=testData$myclass,prediction=prediction)
+  
   print(caret::confusionMatrix(resultTable))
+  print(c50(prediction,testData$myclass))
 }
 
 

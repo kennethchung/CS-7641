@@ -22,6 +22,21 @@ Perceptron – threshold unit
 Back propagation/Gradient Descent
 Preference/Restriction bias of neural networks
 
+Representation of Decision Tree
+Top down and greedy algorithm inducting decision tree ID3
+Expressive of Decision Tree
+Bias of ID3
+Best Attributes (Gain(S,A)
+Deal of with Over fitting
+
+Ensembles are good
+Bagging are good
+Combine simple classifiers -> Complex
+Boosting is really good
+Weaker Learners
+Boosting avoid over fitting
+After the first tree is created, weight are determined and subsequent iterations create weighted trees of about the same size as the first. The final prediction is a simple average
+
 
 
 
