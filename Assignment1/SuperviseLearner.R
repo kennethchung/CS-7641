@@ -60,7 +60,10 @@ gtree<-function(formula,cv,trainData,testData,cp ){
 gbtree<-function(formula,cv,trainData,testData,trials ){
 
   # use trial to simulate boosting vs overfitting
-  btree_opts = data.frame(.model="tree",.trials=c(1:trials),.winnow=FALSE)
+  btree_opts = expand.grid(.model=c("tree", "rules"),
+                          .trials=c(1:9, (1:10)*trials),
+                          .winnow = c(TRUE, FALSE))
+
   # tuneLenght is used to evaluate a broader set of models
   if (trials>0)
     model<-caret::train(formula,data=trainData,method='C5.0',trControl=cv,
@@ -69,13 +72,20 @@ gbtree<-function(formula,cv,trainData,testData,trials ){
     # default # of trials
     model<-caret::train(formula,data=trainData,method='C5.0',trControl=cv,
                  preProcess='range',tuneLength=30)
-  print(model)
+
   
   prediction <- predict(model, testData)
   resultTable=table(actual=testData$myclass,prediction=prediction)
+
+  print(summary(model$finalModel))
+  print(model)
+  print(model$finalModel$tuneValue)
+  print(predictors(model ))
+ 
   
   print(caret::confusionMatrix(resultTable))
-  print(c50(prediction,testData$myclass))
+
+
 }
 
 

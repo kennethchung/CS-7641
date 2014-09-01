@@ -21,10 +21,10 @@ library(plotrix)
 library(rattle)
 library(pROC)
 library(RSNNS)
-
+library(C50)
 
 library(caret)
-#registerDoSNOW(makeCluster(3,type="SOCK"))
+registerDoSNOW(makeCluster(3,type="SOCK"))
 
 redWine<-read.csv("winequality-red.csv",head=TRUE,sep=";")
 redwhiteWine<-read.csv("winequality-white.csv",head=TRUE,sep=";")
