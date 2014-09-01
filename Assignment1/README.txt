@@ -261,7 +261,65 @@ Balanced Accuracy             NA        0.7368      0.7598
   
   
 ----------------------------------------------------------------------------------------------------
-C5.0 Boosted Tree
+Evaluation on training data (5199 cases):
+
+Trial	    Decision Tree   
+-----	  ----------------  
+	  Size      Errors  
+
+   0	   150  966(18.6%)
+   1	    84 1308(25.2%)
+   2	   115 1250(24.0%)
+   3	   108 1446(27.8%)
+   4	    92 1549(29.8%)
+   5	   102 1498(28.8%)
+   6	    74 1564(30.1%)
+   7	    99 1863(35.8%)
+   8	    71 1704(32.8%)
+   9	   119 1437(27.6%)
+  10	    99 1683(32.4%)
+  11	    98 1581(30.4%)
+  12	    82 1456(28.0%)
+  13	   114 1720(33.1%)
+  14	    82 1915(36.8%)
+  15	    37 1965(37.8%)
+  16	    52 1738(33.4%)
+  17	    67 1714(33.0%)
+  18	    73 1881(36.2%)
+  19	    58 1903(36.6%)
+  20	    89 1785(34.3%)
+  21	    46 2016(38.8%)
+  22	    47 1793(34.5%)
+  23	    34 1869(35.9%)
+  24	    11 1531(29.4%)
+  25	    19 1750(33.7%)
+boost	        708(13.6%)   <<
+
+
+	   (a)   (b)   (c)    <-classified as
+	  ----  ----  ----
+	    22   137          (a): class Best
+	        2863   269    (b): class Better
+	         302  1606    (c): class Good
+
+
+	Attribute usage:
+
+	100.00%	free.sulfur.dioxide
+	100.00%	volatile.acidity
+	100.00%	alcohol
+	 99.96%	sulphates
+	 99.85%	pH
+	 99.56%	residual.sugar
+	 99.52%	fixed.acidity
+	 98.96%	chlorides
+	 98.38%	total.sulfur.dioxide
+	 96.67%	citric.acid
+
+
+Time: 2.4 secs
+
+C5.0 
 
 5199 samples
   10 predictor
@@ -270,58 +328,63 @@ C5.0 Boosted Tree
 Pre-processing: re-scaling to [0, 1] 
 Resampling: Cross-Validated (10 fold, repeated 3 times) 
 
-Summary of sample sizes: 4681, 4679, 4679, 4679, 4679, 4678, ... 
+Summary of sample sizes: 4679, 4679, 4680, 4680, 4678, 4679, ... 
 
 Resampling results across tuning parameters:
 
   model  winnow  trials  Accuracy  Kappa  Accuracy SD  Kappa SD
-  rules  FALSE     1     0.739     0.459  0.0118       0.0242  
-  rules  FALSE    10     0.753     0.494  0.0149       0.0292  
-  rules  FALSE    20     0.754     0.495  0.0148       0.0289  
-  rules  FALSE    30     0.756     0.499  0.0162       0.0328  
-  rules  FALSE    40     0.755     0.498  0.0172       0.0350  
-  rules  FALSE    50     0.755     0.498  0.0174       0.0354  
-  rules  FALSE    60     0.755     0.499  0.0171       0.0346  
-  rules  FALSE    70     0.755     0.499  0.0171       0.0346  
-  rules  FALSE    80     0.755     0.499  0.0171       0.0346  
-  rules  FALSE    90     0.755     0.499  0.0171       0.0346  
-  rules  FALSE   100     0.755     0.499  0.0171       0.0346  
-  rules   TRUE     1     0.737     0.453  0.0141       0.0317  
-  rules   TRUE    10     0.748     0.479  0.0179       0.0384  
-  rules   TRUE    20     0.749     0.482  0.0169       0.0357  
-  rules   TRUE    30     0.749     0.483  0.0187       0.0396  
-  rules   TRUE    40     0.749     0.482  0.0185       0.0393  
-  rules   TRUE    50     0.749     0.482  0.0189       0.0399  
-  rules   TRUE    60     0.749     0.483  0.0186       0.0394  
-  rules   TRUE    70     0.749     0.483  0.0186       0.0394  
-  rules   TRUE    80     0.749     0.483  0.0186       0.0394  
-  rules   TRUE    90     0.749     0.483  0.0186       0.0394  
-  rules   TRUE   100     0.749     0.483  0.0186       0.0394  
-  tree   FALSE     1     0.733     0.451  0.0149       0.0310  
-  tree   FALSE    10     0.763     0.506  0.0136       0.0292  
-  tree   FALSE    20     0.765     0.513  0.0140       0.0306  
-  tree   FALSE    30     0.765     0.510  0.0138       0.0300  
-  tree   FALSE    40     0.764     0.509  0.0138       0.0288  
-  tree   FALSE    50     0.766     0.512  0.0145       0.0307  
-  tree   FALSE    60     0.765     0.511  0.0154       0.0320  
-  tree   FALSE    70     0.763     0.507  0.0140       0.0297  
-  tree   FALSE    80     0.764     0.509  0.0142       0.0302  
-  tree   FALSE    90     0.764     0.509  0.0140       0.0300  
-  tree   FALSE   100     0.766     0.514  0.0152       0.0323  
-  tree    TRUE     1     0.732     0.447  0.0145       0.0313  
-  tree    TRUE    10     0.755     0.489  0.0153       0.0326  
-  tree    TRUE    20     0.753     0.486  0.0159       0.0342  
-  tree    TRUE    30     0.753     0.486  0.0162       0.0351  
-  tree    TRUE    40     0.753     0.485  0.0174       0.0371  
-  tree    TRUE    50     0.755     0.490  0.0188       0.0401  
-  tree    TRUE    60     0.755     0.489  0.0194       0.0413  
-  tree    TRUE    70     0.754     0.487  0.0177       0.0381  
-  tree    TRUE    80     0.754     0.488  0.0186       0.0400  
-  tree    TRUE    90     0.754     0.488  0.0187       0.0403  
-  tree    TRUE   100     0.756     0.490  0.0196       0.0419  
+  rules  FALSE     1     0.734     0.448  0.0163       0.0330  
+  rules  FALSE    10     0.754     0.494  0.0168       0.0326  
+  rules  FALSE    20     0.755     0.496  0.0164       0.0333  
+  rules  FALSE    30     0.755     0.497  0.0165       0.0332  
+  rules  FALSE    40     0.755     0.498  0.0161       0.0324  
+  rules  FALSE    50     0.755     0.498  0.0161       0.0324  
+  rules  FALSE    60     0.755     0.498  0.0161       0.0324  
+  rules  FALSE    70     0.755     0.498  0.0161       0.0324  
+  rules  FALSE    80     0.755     0.498  0.0161       0.0324  
+  rules  FALSE    90     0.755     0.498  0.0161       0.0324  
+  rules  FALSE   100     0.755     0.498  0.0161       0.0324  
+  rules   TRUE     1     0.729     0.437  0.0167       0.0362  
+  rules   TRUE    10     0.745     0.474  0.0210       0.0430  
+  rules   TRUE    20     0.745     0.474  0.0204       0.0428  
+  rules   TRUE    30     0.744     0.472  0.0194       0.0418  
+  rules   TRUE    40     0.744     0.473  0.0193       0.0417  
+  rules   TRUE    50     0.744     0.473  0.0193       0.0417  
+  rules   TRUE    60     0.744     0.473  0.0193       0.0417  
+  rules   TRUE    70     0.744     0.473  0.0193       0.0417  
+  rules   TRUE    80     0.744     0.473  0.0193       0.0417  
+  rules   TRUE    90     0.744     0.473  0.0193       0.0417  
+  rules   TRUE   100     0.744     0.473  0.0193       0.0417  
+  tree   FALSE     1     0.732     0.448  0.0182       0.0360  
+  tree   FALSE    10     0.757     0.492  0.0197       0.0408  
+  tree   FALSE    20     0.759     0.496  0.0232       0.0504  
+  tree   FALSE    30     0.761     0.501  0.0225       0.0473  
+  tree   FALSE    40     0.758     0.493  0.0219       0.0464  
+  tree   FALSE    50     0.760     0.500  0.0219       0.0467  
+  tree   FALSE    60     0.759     0.496  0.0217       0.0459  
+  tree   FALSE    70     0.760     0.499  0.0217       0.0457  
+  tree   FALSE    80     0.760     0.499  0.0216       0.0454  
+  tree   FALSE    90     0.759     0.497  0.0206       0.0431  
+  tree   FALSE   100     0.762     0.503  0.0221       0.0462  
+  tree    TRUE     1     0.726     0.434  0.0182       0.0378  
+  tree    TRUE    10     0.748     0.475  0.0156       0.0321  
+  tree    TRUE    20     0.753     0.485  0.0193       0.0404  
+  tree    TRUE    30     0.753     0.486  0.0211       0.0441  
+  tree    TRUE    40     0.753     0.484  0.0202       0.0423  
+  tree    TRUE    50     0.753     0.486  0.0199       0.0414  
+  tree    TRUE    60     0.752     0.483  0.0195       0.0407  
+  tree    TRUE    70     0.753     0.484  0.0199       0.0412  
+  tree    TRUE    80     0.752     0.484  0.0198       0.0412  
+  tree    TRUE    90     0.753     0.485  0.0204       0.0424  
+  tree    TRUE   100     0.754     0.487  0.0214       0.0442  
 
 Accuracy was used to select the optimal model using  the largest value.
 The final values used for the model were trials = 100, model = tree and winnow = FALSE. 
+   trials model winnow
+11    100  tree  FALSE
+ [1] "alcohol"              "sulphates"            "free.sulfur.dioxide"  "fixed.acidity"       
+ [5] "volatile.acidity"     "residual.sugar"       "pH"                   "chlorides"           
+ [9] "citric.acid"          "total.sulfur.dioxide"
 Confusion Matrix and Statistics
 
         prediction
@@ -351,8 +414,6 @@ Prevalence             0.0007704        0.6595      0.3398
 Detection Rate         0.0007704        0.5108      0.2465
 Detection Prevalence   0.0300462        0.6032      0.3667
 Balanced Accuracy      0.9853508        0.7515      0.7718
-
-
 --------------------------------------------------------------------------------------
 Support Vector Machines with Linear Kernel 
 
