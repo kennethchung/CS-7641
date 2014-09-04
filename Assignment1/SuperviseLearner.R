@@ -48,9 +48,11 @@ gtree<-function(formula,cv,trainData,testData,cp ){
   # prediction using probability
   #prediction <- predict(model, testData, type="prob")
   
-  resultTable=table(actual=testData$myclass,prediction=prediction)
+  #resultTable=table(actual=testData$myclass,prediction=prediction)
   # Use the confusiont to evaluate the result
-  print(caret::confusionMatrix(resultTable))
+  #print(caret::confusionMatrix(resultTable))
+  #plot(as.party(model$finalModel), type="simple")
+  #text(model$finalModel)
 }
 
 #########################################################################

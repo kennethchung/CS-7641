@@ -86,6 +86,31 @@ DescisionTree<-function(){
 }
 
 
+BostonTree<-function(){
+  
+  
+  fit<-rpart(BostonFormula,data=BostonTrainingData,method="anova",control=rpart.control(minsplit=10))
+  
+  pfit<- prune(fit, cp=   fit$cptable[which.min(fit$cptable[,"xerror"]),"CP"])
+  fit<-pfit
+  
+  print(fit)
+  printcp(fit)
+  plot(as.party(fit), type="extended")
+  #rsq.rpart(fit)
+  print(summary(fit))
+  #plotcp(fit)
+  
+  #prediction <-predict(fit,testData,type="class")
+  
+  #pred.df <-as.data.frame(prediction)
+  
+  #prob <- sum(pred.df[,1] == testData$quality) /nrow(testData)
+  #print(prob)
+  #print(table(testData$quality,prediction))
+}
+
+
 DescisionTree1<-function(){
   
   trainData <-whitetraindata
